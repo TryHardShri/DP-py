@@ -1,0 +1,14 @@
+def caesarCipher():
+str1=input("Enter the message: ")
+key=int(input("Enter the shift key size: "))
+L1=[]
+b=str1.replace(" ","")
+b.upper()
+for i in b:
+for j in i:
+L1.append(j)
+result=""
+for char in L1:
+result += chr((ord(char)+key))
+print(result)
+caesarCipher()
