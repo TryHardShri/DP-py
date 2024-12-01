@@ -1,0 +1,73 @@
+def encryptRailFence(text, key):
+# Create a matrix to store the zigzag pattern
+rail = [['\n' for _ in range(len(text))] for _ in range(key)]
+# Initialize variables to track position
+dir_down = False
+row, col = 0, 0
+# Fill the rail matrix with the text
+for char in text:
+rail[row][col] = char
+col += 1
+# Change direction at the top and bottom rails
+if row == 0 or row == key - 1:
+dir_down = not dir_down
+# Move to the next row in the correct direction
+row += 1 if dir_down else -1
+# Collect the cipher text by reading the rails row by row
+result = ''.join(''.join(rail[r][c] for c in range(len(text)) if rail[r][c] != '\n') for r
+in range(key))
+return result
+
+def decryptRailFence(cipher, key):
+# Create a matrix to store the pattern
+rail = [['\n' for _ in range(len(cipher))] for _ in range(key)]
+# Initialize variables
+dir_down = None
+row, col = 0, 0
+
+# Mark the positions of the cipher text in the rail matrix
+for i in range(len(cipher)):
+rail[row][col] = '*'
+col += 1
+if row == 0:
+dir_down = True
+elif row == key - 1:
+dir_down = False
+# Move up or down
+row += 1 if dir_down else -1
+# Fill the matrix with the cipher text
+index = 0
+for i in range(key):
+for j in range(len(cipher)):
+if rail[i][j] == '*' and index < len(cipher):
+rail[i][j] = cipher[index]
+index += 1
+# Read the rail matrix to get the decrypted text
+result = []
+row, col = 0, 0
+for i in range(len(cipher)):
+if rail[row][col] != '*':
+result.append(rail[row][col])
+col += 1
+if row == 0:
+dir_down = True
+elif row == key - 1:
+dir_down = False
+# Move up or down
+row += 1 if dir_down else -1
+return ''.join(result)
+
+# Driver code
+if __name__ == "__main__":
+choice = input("Would you like to (E)ncrypt or (D)ecrypt? ").strip().lower()
+text = input("Enter the text: ").strip()
+key = int(input("Enter the key (number of rails): ").strip())
+if choice == 'e':
+encrypted_text = encryptRailFence(text, key)
+print(f"Encrypted text: {encrypted_text}")
+elif choice == 'd':
+decrypted_text = decryptRailFence(text, key)
+print(f"Decrypted text: {decrypted_text}")
+else:
+print("Invalid choice. Please choose 'E' for encryption or 'D' for
+decryption.")
